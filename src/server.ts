@@ -1,12 +1,17 @@
 import Fastify from "fastify";
+import cors from '@fastify/cors'
 
-const fastify = Fastify({
-  logger:true,
-})
-const PORT = 5000;
+
+
 const startServer = async () => {
-   
+  const PORT = 5000;
+  const fastify = Fastify({
+      logger:true,
+  })
 
+  await fastify.register(cors,{
+      origin: true,
+  })
   fastify.get('/', (req, reply) => {
     reply.send([
       { id: 1, title: 'Post One', body: 'This is post one' },

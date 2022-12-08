@@ -8,6 +8,7 @@ Documentação [fastify.io](https://www.fastify.io/)
 
 npm init -y
 npm install fastify
+npm i @fastify/cors
 npm install -D nodemon
 npm install config
 npm i typescript --save-dev

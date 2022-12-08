@@ -1,16 +1,17 @@
 import Fastify from "fastify";
 import cors from '@fastify/cors'
-
+import UserController from "./Controllers/UserController";
 
 
 const startServer = async () => {
+  const userController = new UserController();
   const PORT = 5000;
   const fastify = Fastify({
       logger:true,
   })
 
   await fastify.register(cors,{
-      origin: true,
+      origin: false,
   })
   fastify.get('/', (req, reply) => {
     reply.send([
@@ -22,7 +23,16 @@ const startServer = async () => {
     ]);
   });
 
-  //await fastify.listen({port:PORT, host:'localhost'}) //desenvolvimentolocal
-  await fastify.listen({port:PORT, host: '0.0.0.0'}) //producao
+  fastify.get('/user/create', async (req, reply) => {
+
+    const user = await userController.create({
+      name: "Rogerio",
+      email: "rogerio@teste.com.br"
+    })
+    reply.send(user);
+  });
+
+  await fastify.listen({port:PORT, host:'localhost'}) //desenvolvimentolocal
+  //await fastify.listen({port:PORT, host: '0.0.0.0'}) //producao
 }
   startServer()

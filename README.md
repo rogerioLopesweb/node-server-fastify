@@ -39,4 +39,5 @@ No Cpanel executar: <br/>
 
 ## ORM Prima
 Video de referencia <br/>
+https://www.youtube.com/watch?v=btaePK6RzgA
 

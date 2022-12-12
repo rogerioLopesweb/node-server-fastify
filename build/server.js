@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fastify_1 = __importDefault(require("fastify"));
 const cors_1 = __importDefault(require("@fastify/cors"));
+const zod_1 = require("zod");
 const UserController_1 = __importDefault(require("./Controllers/UserController"));
 const startServer = async () => {
     const userController = new UserController_1.default();
@@ -15,19 +16,31 @@ const startServer = async () => {
     await fastify.register(cors_1.default, {
         origin: false,
     });
-    fastify.get('/', (req, reply) => {
-        reply.send([
-            { id: 1, title: 'Post One', body: 'This is post one' },
-            { id: 2, title: 'Post Two', body: 'This is post two' },
-            { id: 3, title: 'Post Three', body: 'This is post three' },
-            { id: 4, title: 'Post Three', body: 'This is post Four 4' },
-            { id: 5, title: 'Post Three', body: 'This is post Five 5' },
-        ]);
+    fastify.post('/user/id', async (req, reply) => {
+        const createUserBody = zod_1.z.object({
+            idUser: zod_1.z.string()
+        });
+        const userZ = createUserBody.parse(req.body);
+        const user = await userController.byID(userZ.idUser);
+        reply.send(user);
     });
-    fastify.get('/user/create', async (req, reply) => {
+    fastify.get('/', async (req, reply) => {
+        const users = await userController.list();
+        reply.send(users);
+    });
+    fastify.post('/user/create', async (req, reply) => {
+        const createUserBody = zod_1.z.object({
+            name: zod_1.z.string(),
+            username: zod_1.z.string(),
+            email: zod_1.z.string().email({ message: "Invalid email address" }),
+            password: zod_1.z.string()
+        });
+        const userZ = createUserBody.parse(req.body);
         const user = await userController.create({
-            name: "Rogerio",
-            email: "rogerio@teste.com.br"
+            name: userZ.name,
+            username: userZ.username,
+            email: userZ.email,
+            password: userZ.password
         });
         reply.send(user);
     });

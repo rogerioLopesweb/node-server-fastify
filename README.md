@@ -9,11 +9,14 @@ Documentação [fastify.io](https://www.fastify.io/)
 * npm init -y
 * npm install fastify
 * npm i @fastify/cors
+* npm install zod
 * npm install -D nodemon
 * npm install config
 * npm i typescript --save-dev
+* npm i -D typescript @types/node
 * npm i prisma
 * npx prisma migrate dev --name init  
+
 
 ## Videos de apoio a configuração de ambiente
 
@@ -25,7 +28,7 @@ Executar o comando npm run build <br/>
 Subir a pasta build/server.js  <br/>
 
 "scripts": {
-    "build": "tsc",
+    "build": "tsc w",
     "start": "node build/server.js",
     "server": "nodemon build/server.js"
   },

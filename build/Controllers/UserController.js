@@ -9,8 +9,32 @@ class UserController {
         try {
             return this.prima.user.create({ data: { ...data } });
         }
-        catch (error) {
-            return error;
+        catch (e) {
+            if (e instanceof client_1.Prisma.PrismaClientKnownRequestError) {
+                // The .code property can be accessed in a type-safe manner
+                if (e.code === 'P2002') {
+                    console.log("E-mail already existing");
+                }
+            }
+            return e;
+        }
+    }
+    async list() {
+        try {
+            return this.prima.user.findMany();
+        }
+        catch (e) {
+            return e;
+        }
+    }
+    async byID(idUser) {
+        try {
+            return await this.prima.user.findUnique({
+                where: { id: idUser }
+            });
+        }
+        catch (e) {
+            return e;
         }
     }
 }

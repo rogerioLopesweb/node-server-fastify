@@ -1,5 +1,6 @@
 import Fastify from "fastify";
 import cors from '@fastify/cors'
+import { z } from 'zod'
 import UserController from "./Controllers/UserController";
 
 
@@ -13,26 +14,42 @@ const startServer = async () => {
   await fastify.register(cors,{
       origin: false,
   })
-  fastify.get('/', (req, reply) => {
-    reply.send([
-      { id: 1, title: 'Post One', body: 'This is post one' },
-      { id: 2, title: 'Post Two', body: 'This is post two' },
-      { id: 3, title: 'Post Three', body: 'This is post three' },
-      { id: 4, title: 'Post Three', body: 'This is post Four 4' },
-      { id: 5, title: 'Post Three', body: 'This is post Five 5' },
-    ]);
-  });
 
-  fastify.get('/user/create', async (req, reply) => {
+  fastify.post('/user/id', async (req, reply) => {
+    const createUserBody = z.object({
+      idUser: z.string()
+    });
 
-    const user = await userController.create({
-      name: "Rogerio",
-      email: "rogerio@teste.com.br"
-    })
+    const userZ = createUserBody.parse(req.body)
+    const user = await userController.byID(userZ.idUser)
     reply.send(user);
   });
 
-  await fastify.listen({port:PORT, host:'localhost'}) //desenvolvimentolocal
-  //await fastify.listen({port:PORT, host: '0.0.0.0'}) //producao
+  fastify.get('/', async (req, reply) => {
+    const users = await userController.list()
+    reply.send(users);
+  });
+
+  fastify.post('/user/create', async (req, reply) => {
+    const createUserBody = z.object({
+      name: z.string(),
+      username: z.string(),
+      email: z.string().email({ message: "Invalid email address" }),
+      password: z.string()
+    });
+
+    const userZ = createUserBody.parse(req.body)
+    const user = await userController.create({
+        name: userZ.name,
+        username: userZ.username,
+        email : userZ.email,
+        password : userZ.password
+      })
+      reply.send(user);
+    });
+
+    await fastify.listen({port:PORT, host:'localhost'}) //desenvolvimentolocal
+   //await fastify.listen({port:PORT, host: '0.0.0.0'}) //producao
 }
-  startServer()
+
+startServer()

@@ -7,5 +7,6 @@ declare class UserController {
     list(): Promise<unknown>;
     byID(idUser: string): Promise<unknown>;
     login(email: string, password: string): Promise<unknown>;
+    delete(idUser: string): Promise<unknown>;
 }
 export default UserController;

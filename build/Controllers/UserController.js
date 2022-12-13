@@ -73,5 +73,15 @@ class UserController {
             return e;
         }
     }
+    async delete(idUser) {
+        try {
+            return await this.prisma.user.delete({
+                where: { id: idUser }
+            });
+        }
+        catch (e) {
+            return e;
+        }
+    }
 }
 exports.default = UserController;

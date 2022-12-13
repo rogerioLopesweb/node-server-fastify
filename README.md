@@ -15,8 +15,6 @@ Documentação [fastify.io](https://www.fastify.io/)
 * npm i typescript --save-dev
 * npm i -D typescript @types/node
 * npm i prisma
-* npx prisma migrate dev --name init  
-
 
 ## Videos de apoio a configuração de ambiente
 
@@ -40,10 +38,11 @@ No Cpanel executar: <br/>
 
  *sempre que atualizar o arquivo server.js excutar a opação 2 para atualizar<br/>
 
-## ORM Prima
+## ORM Prisma
 Video de referencia <br/>
 https://www.youtube.com/watch?v=btaePK6RzgA
 
-Comando migration  <br/>
+Comandos migration e Prisma Studio <br/>
 
-npx prisma migrate dev --name UserAjustes
+* npx prisma migrate dev --name init  
+* npx prisma studio

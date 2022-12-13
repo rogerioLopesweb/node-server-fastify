@@ -16,8 +16,6 @@ const startServer = async () => {
       origin: false,
   })
 
-  
-
   fastify.get('/', async (req, reply) => {
     const users = await userController.list()
     reply.send(users);
@@ -79,6 +77,16 @@ const startServer = async () => {
           email : userZ.email,
           password : userZ.password
         })
+        reply.send(user);
+      });
+
+      fastify.delete('/user/delete', async (req, reply) => {
+        const createUserBody = z.object({
+          idUser: z.string()
+        });
+    
+        const userZ = createUserBody.parse(req.body)
+        const user = await userController.delete(userZ.idUser)
         reply.send(user);
       });
 

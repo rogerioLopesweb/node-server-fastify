@@ -74,5 +74,15 @@ class UserController {
             return e;
         }
     }
+
+    async delete(idUser : string){
+        try {
+           return await this.prisma.user.delete({
+            where: { id: idUser }
+           })
+        } catch (e) {
+            return e;
+        }
+    }
 }
 export default UserController

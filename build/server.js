@@ -71,6 +71,14 @@ const startServer = async () => {
         });
         reply.send(user);
     });
+    fastify.delete('/user/delete', async (req, reply) => {
+        const createUserBody = zod_1.z.object({
+            idUser: zod_1.z.string()
+        });
+        const userZ = createUserBody.parse(req.body);
+        const user = await userController.delete(userZ.idUser);
+        reply.send(user);
+    });
     await fastify.listen({ port: PORT, host: 'localhost' }); //desenvolvimentolocal
     //await fastify.listen({port:PORT, host: '0.0.0.0'}) //producao
 };

@@ -15,6 +15,13 @@ const startServer = async () => {
       origin: false,
   })
 
+  
+
+  fastify.get('/', async (req, reply) => {
+    const users = await userController.list()
+    reply.send(users);
+  });
+
   fastify.post('/user/id', async (req, reply) => {
     const createUserBody = z.object({
       idUser: z.string()
@@ -25,9 +32,15 @@ const startServer = async () => {
     reply.send(user);
   });
 
-  fastify.get('/', async (req, reply) => {
-    const users = await userController.list()
-    reply.send(users);
+  fastify.post('/user/login', async (req, reply) => {
+    const createUserBody = z.object({
+      email: z.string(),
+      password: z.string(),
+    });
+
+    const userZ = createUserBody.parse(req.body)
+    const user = await userController.login(userZ.email, userZ.password)
+    reply.send(user);
   });
 
   fastify.post('/user/create', async (req, reply) => {

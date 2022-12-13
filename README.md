@@ -44,3 +44,6 @@ No Cpanel executar: <br/>
 Video de referencia <br/>
 https://www.youtube.com/watch?v=btaePK6RzgA
 
+Comando migration  <br/>
+
+npx prisma migrate dev --name UserAjustes

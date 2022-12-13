@@ -1,14 +1,15 @@
 import { PrismaClient, Prisma,  User } from '@prisma/client';
+import { parse } from 'path';
 
 class UserController {
-    private prima: PrismaClient;
+    private prisma: PrismaClient;
 
     constructor(){
-        this.prima = new PrismaClient()
+        this.prisma = new PrismaClient()
     }
     async create(data: Omit<User, 'id'>){
         try {
-           return this.prima.user.create({data:{...data}});
+           return this.prisma.user.create({data:{...data}});
         } catch (e) {
             if (e instanceof Prisma.PrismaClientKnownRequestError) {
                 // The .code property can be accessed in a type-safe manner
@@ -23,7 +24,7 @@ class UserController {
 
     async list(){
         try {
-           return this.prima.user.findMany();
+           return this.prisma.user.findMany();
         } catch (e) {
             return e;
         }
@@ -32,9 +33,28 @@ class UserController {
 
     async byID(idUser : string){
         try {
-           return await this.prima.user.findUnique({
+           return await this.prisma.user.findUnique({
             where: { id: idUser }
            })
+        } catch (e) {
+            return e;
+        }
+    }
+
+    async login(email :  string,  password : string){
+        try {
+           const user =  await this.prisma.user.findUnique({
+            where: {
+                email,
+              },
+           })
+
+           if(user!= null &&  user?.password === password){
+              return user;
+           }else{
+            return null;
+           }
+           
         } catch (e) {
             return e;
         }

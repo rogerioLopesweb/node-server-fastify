@@ -3,11 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 class UserController {
     constructor() {
-        this.prima = new client_1.PrismaClient();
+        this.prisma = new client_1.PrismaClient();
     }
     async create(data) {
         try {
-            return this.prima.user.create({ data: { ...data } });
+            return this.prisma.user.create({ data: { ...data } });
         }
         catch (e) {
             if (e instanceof client_1.Prisma.PrismaClientKnownRequestError) {
@@ -21,7 +21,7 @@ class UserController {
     }
     async list() {
         try {
-            return this.prima.user.findMany();
+            return this.prisma.user.findMany();
         }
         catch (e) {
             return e;
@@ -29,9 +29,27 @@ class UserController {
     }
     async byID(idUser) {
         try {
-            return await this.prima.user.findUnique({
+            return await this.prisma.user.findUnique({
                 where: { id: idUser }
             });
+        }
+        catch (e) {
+            return e;
+        }
+    }
+    async login(email, password) {
+        try {
+            const user = await this.prisma.user.findUnique({
+                where: {
+                    email,
+                },
+            });
+            if (user != null && user?.password === password) {
+                return user;
+            }
+            else {
+                return null;
+            }
         }
         catch (e) {
             return e;

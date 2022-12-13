@@ -19,6 +19,24 @@ class UserController {
             return e;
         }
     }
+    async update(data) {
+        try {
+            return this.prisma.user.updateMany({
+                where: {
+                    id: data.id,
+                },
+                data: {
+                    name: data.name,
+                    username: data.username,
+                    email: data.email,
+                    password: data.password
+                },
+            });
+        }
+        catch (e) {
+            return e;
+        }
+    }
     async list() {
         try {
             return this.prisma.user.findMany();

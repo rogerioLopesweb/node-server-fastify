@@ -2,6 +2,7 @@ import Fastify from "fastify";
 import cors from '@fastify/cors'
 import { z } from 'zod'
 import UserController from "./Controllers/UserController";
+import { userInfo } from "os";
 
 
 const startServer = async () => {
@@ -60,6 +61,26 @@ const startServer = async () => {
       })
       reply.send(user);
     });
+
+    fastify.put('/user/update', async (req, reply) => {
+      const createUserBody = z.object({
+        id: z.string(),
+        name: z.string(),
+        username: z.string(),
+        email: z.string().email({ message: "Invalid email address" }),
+        password: z.string()
+      });
+  
+      const userZ = createUserBody.parse(req.body)
+      const user = await userController.update({
+          id: userZ.id,
+          name: userZ.name,
+          username: userZ.username,
+          email : userZ.email,
+          password : userZ.password
+        })
+        reply.send(user);
+      });
 
     await fastify.listen({port:PORT, host:'localhost'}) //desenvolvimentolocal
    //await fastify.listen({port:PORT, host: '0.0.0.0'}) //producao

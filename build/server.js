@@ -53,6 +53,24 @@ const startServer = async () => {
         });
         reply.send(user);
     });
+    fastify.put('/user/update', async (req, reply) => {
+        const createUserBody = zod_1.z.object({
+            id: zod_1.z.string(),
+            name: zod_1.z.string(),
+            username: zod_1.z.string(),
+            email: zod_1.z.string().email({ message: "Invalid email address" }),
+            password: zod_1.z.string()
+        });
+        const userZ = createUserBody.parse(req.body);
+        const user = await userController.update({
+            id: userZ.id,
+            name: userZ.name,
+            username: userZ.username,
+            email: userZ.email,
+            password: userZ.password
+        });
+        reply.send(user);
+    });
     await fastify.listen({ port: PORT, host: 'localhost' }); //desenvolvimentolocal
     //await fastify.listen({port:PORT, host: '0.0.0.0'}) //producao
 };
